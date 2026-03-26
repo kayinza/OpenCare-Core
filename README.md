@@ -118,6 +118,60 @@ This is the **recommended** way to run OpenCare-Africa as it ensures consistency
 - Review sanitized response expectations and logging rules in [`docs/error-handling.md`](docs/error-handling.md) before exposing new endpoints.
 - Extend automated tests to cover both happy-path and error scenarios when updating API behavior; see the error-handling guide for recommendations.
 
+## 🧪 API Testing
+
+### Testing the Health Endpoint
+
+```bash
+# Test the health check endpoint
+curl http://localhost:8000/health/
+
+# Expected response:
+# {"status": "ok"}
+```
+
+### Testing API Endpoints with curl
+
+```bash
+# Get authentication token (if auth is enabled)
+curl -X POST http://localhost:8000/api/v1/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "password"}'
+
+# List all patients (requires auth)
+curl http://localhost:8000/api/v1/patients/ \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+# Create a new patient (requires auth)
+curl -X POST http://localhost:8000/api/v1/patients/ \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "John",
+    "last_name": "Doe",
+    "date_of_birth": "1990-01-01",
+    "gender": "M",
+    "phone": "+256700000000",
+    "email": "john.doe@example.com"
+  }'
+
+# Get health worker details
+curl http://localhost:8000/api/v1/health-workers/ \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+# List health facilities
+curl http://localhost:8000/api/v1/facilities/ \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+### Using the Interactive API Documentation
+
+1. Start the application: `python manage.py runserver`
+2. Navigate to: http://localhost:8000/api/docs/
+3. Click on any endpoint to expand it
+4. Click "Try it out" to test the endpoint directly
+5. For authenticated endpoints, click the "Authorize" button and enter your credentials
+
 ### 🐳 Docker Services Overview
 
 The Docker setup includes the following services:
